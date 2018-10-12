@@ -1,0 +1,341 @@
+{
+	"info": {
+		"name": "Raspberry Pi",
+		"_postman_id": "4b4bef62-145b-304e-a419-f3b4e603a5f4",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:1080/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:1080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1080"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1080/alarm/on/",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"access_key\": \"key123\",\n\t\"timeout\":100}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:1080/alarm/on",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "1080",
+					"path": [
+						"alarm",
+						"on"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1080/logs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:1080/logs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1080",
+					"path": [
+						"logs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1080/ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:1080/ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1080",
+					"path": [
+						"ping"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1080/reset",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:1080/reset",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1080",
+					"path": [
+						"reset"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://remote",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://10.27.57.178",
+					"protocol": "http",
+					"host": [
+						"10",
+						"27",
+						"57",
+						"178"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://remote/alarm/on",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"access_key\" : \"asdf\"\n}"
+				},
+				"url": {
+					"raw": "http://10.27.57.178/alarm/on",
+					"protocol": "http",
+					"host": [
+						"10",
+						"27",
+						"57",
+						"178"
+					],
+					"path": [
+						"alarm",
+						"on"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://remote/alarm/off",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://10.27.57.178/alarm/off",
+					"protocol": "http",
+					"host": [
+						"10",
+						"27",
+						"57",
+						"178"
+					],
+					"path": [
+						"alarm",
+						"off"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://remote/info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://10.27.57.178/stats",
+					"protocol": "http",
+					"host": [
+						"10",
+						"27",
+						"57",
+						"178"
+					],
+					"path": [
+						"stats"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://remote/logs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://10.27.57.178/logs",
+					"protocol": "http",
+					"host": [
+						"10",
+						"27",
+						"57",
+						"178"
+					],
+					"path": [
+						"logs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://remote/ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://10.27.57.178/logs",
+					"protocol": "http",
+					"host": [
+						"10",
+						"27",
+						"57",
+						"178"
+					],
+					"path": [
+						"logs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://remote/reset",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://10.27.57.178/reset",
+					"protocol": "http",
+					"host": [
+						"10",
+						"27",
+						"57",
+						"178"
+					],
+					"path": [
+						"reset"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1080/info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:1080/info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1080",
+					"path": [
+						"info"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:1080/alarm/off",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"access_key\": \"jenkins123\"}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:1080/alarm/off",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "1080",
+					"path": [
+						"alarm",
+						"off"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

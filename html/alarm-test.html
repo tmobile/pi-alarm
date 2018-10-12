@@ -1,0 +1,58 @@
+<html>
+<head>
+    <title>Alarm On/Off</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <style>
+        body {
+            background-color: gray;
+        }
+
+        #container {
+            padding-top: 100px;
+            margin: 0 auto;
+            width: 500px;
+        }
+
+        #on, #off {
+            color: white;
+            font-size: 100px;
+            width: 200px;
+            height: 200px;
+        }
+
+        #on {
+            background-color: red;
+        }
+
+        #off {
+            background-color: black;
+        }
+    </style>
+
+    <script type="text/javascript">
+        baseUrl = 'http://10.27.57.178'
+        accessKey = "my_test_key"
+
+        function callAlarm(action) {
+            $.ajax({
+                type: "POST",
+                url: baseUrl + '/alarm/' + action,
+                data: '{"access_key":'+accessKey+'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                crossDomain: true
+            })
+        }
+    </script>
+
+</head>
+
+<body>
+<div id="container">
+    <input type="button" id="on" value="On" onclick="callAlarm('on')"/>
+    &nbsp;&nbsp;
+    <input type="button" id="off" value="Off" onclick="callAlarm('off')"/>
+</div>
+</body>
+</html>

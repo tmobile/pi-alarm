@@ -1,0 +1,14 @@
+@startuml
+actor Client
+
+Client -> Pi: /alarm/on
+Pi -> Relay: Close relay switch
+Relay -> Alarm: Turns on light
+Pi --> Client: Light is on
+
+Client -> Pi: /alarm/off
+Pi -> Relay: Open relay switch
+Relay -> Alarm: Turns off light
+Pi --> Client: Light is off
+
+@enduml

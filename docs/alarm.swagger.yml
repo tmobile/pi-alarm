@@ -1,0 +1,98 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Raspberry Pi Alarm
+  description: API to turn on/off an alarm using Raspberry Pi
+  contact:
+    name: >
+      DTD -> CE -> DD -> FDX
+      Oliver Tseng <oliver.tseng@t-mobile.com>
+host: localhost
+basePath: /
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /alarm/on:
+    post:
+      description: Turns on the alarm
+      operationId: alarm_on
+      produces:
+      - application/json
+      parameters:
+      - name: alarm-parameters
+        in: body
+        description: The alarm parameters
+        required: false
+        schema:
+          $ref: '#/definitions/alarm-parameters'
+      responses:
+        '200':
+          description: success
+        default:
+          description: unexpected error
+  /alarm/off:
+    post:
+      description: Turns off the alarm
+      operationId: alarm_off
+      parameters:
+      - name: alarm-parameters
+        in: body
+        description: The alarm parameters
+        required: false
+        schema:
+          $ref: '#/definitions/alarm-parameters'
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: success
+        default:
+          description: unexpected error
+  /info:
+    get:
+      description: Display configuration info and user access info
+      operationId: info
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: success
+        default:
+          description: unexpected error
+  /logs:
+    get:
+      description: Get the logs
+      operationId: logs
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: success
+        default:
+          description: unexpected error
+  /ping:
+    get:
+      description: Ping the server to see if it's up
+      operationId: ping
+      responses:
+        '200':
+          description: success
+        default:
+          description: unexpected error
+definitions:
+  alarm-parameters:
+    type: object
+    properties:
+      timeout:
+        type: number
+        description: The time the alarm will turn off automatically after it is turned on
+        minimum: 0
+        maximum: 99999
+        default: 60
+      access_key:
+        type: string
+        description: The user token for authorized access

@@ -1,0 +1,6 @@
+.idea
+*.log
+__pycache__
+.vscode
+alarm/key_file.txt
+alarm/logging.conf.yaml
