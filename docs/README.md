@@ -1,134 +1,31 @@
-# Raspberry Pi Alarm
+---
+title: "Raspberry Pi Alarm"
+draft: false
+---
 
-![Pi Alarm](images/pi-alarm-medium.jpg)
+# Pi-Alarm User Guide
 
-## Overview
+This guide will take you step-by-step through building your own Pi-Alarm to control an alarm (or anything, really) with a Raspberry Pi over the internet! Development teams at [T-Mobile](https://opensource.t-mobile.com/) use Pi-Alarm to provide a clear visual alert to developers whenever something goes wrong in our build pipeline.
 
-Control an alarm with a Raspberry Pi
+## Overall Design
 
-![Raspberry Pi Setup](images/setup.jpg)
+**Before you get started**, it is important to understand the overall design of the Pi-Alarm.
 
-## Equipment/Parts
-
-- Raspberry Pi 3
-- Monitor with HDMI
-- Wireless keyboard, mouse
-- Ethernet cable
-- 5VDC Relay switch
-- Alarm
-- Extension cord
-- Jumper wires
-- Housing for relay
-- USB Battery pack (optional)
-
-
-## Raspberry Pi Setup
-
-Install [NOOBS](https://www.raspberrypi.org/help/noobs-setup/2)
-
-Connect the monitor, wireless keyboard, mouse, and power to Pi.
-
-Boot and bring up the desktop.
-
-## Design
-
-The Raspberry Pi will run a Python program that acts as a REST server.  The program will control a GPIO pin.  The GPIO pin will control the relay switch.  The relay switch is connected to the extension cord which powers the alarm.
+The Raspberry Pi will run a Python program that acts as a simple web server to control a relay which is used to control the flow of electricity to the alarm (like an on/off switch). The program interacts with the relay through the Pi's GPIO pins via jumper wires. The relay switch is connected to an extension cord which powers the alarm.
 
 ![Design](images/design.jpg)
 
-## Sequence Diagram
+When assembing and testing the hardware, be sure to **follow all proper safety precautions**.
 
-![Sequence Diagram](images/sequence.png)
-[PlantUML Sequence Diagram](docs/sequence.puml)
+## Getting Started
 
-## Relay Switch
+To get up-and-running with a Pi-Alarm, there are two major steps:
 
-The alarm is powered by 120V outlet.  The relay switch opens and closes the 120V power supply.  The relay switch has 3 input controls (+, -, and S).  The + and -
-provide the power to the relay.  The S turns the relay on and off.  The + pin on the relay connects to Pi pin 4 (5V).  The - pin on the relay
-connects to Pi pin 6 (ground).  The S pin on the relay connects to Pi pin 12 (GPIO 18).
+1. [Install and Run the Pi-Alarm Software](software-instructions.md)
+1. [Build the Pi-Alarm](build-instructions.md)
 
-## Code
+Once you've installed the Pi-Alarm software and connected all the hardware, you're ready to begin using your Pi-Alarm!
 
-https://github.com/tmobile/pi-alarm
+## Using Your Pi Alarm
 
-### Python setup
-
-Make sure using Python 3.  On the Pi, it might be using 2.7.  Need to change the /usr/bin/python to point to /usr/bin/python3.
-```
-sudo su
-rm /usr/bin/python
-ln -s /usr/bin/python3 /usr/bin/python
-```
-
-Python required modules
-```
-pip install Flask Flask-API flask-cors PyYAML
-```
-> *Note:* _Windows Users, if you have installed Python/Pip3 via Cygwin, you need to install Python on Windows OS explicitly and set it on path; for unit tests to run_
-
-### Transfer file from PC to Pi
-
-Find IP of Pi:
-
-`hostname -I`
-
-Use SCP/Filezilla to transfer files
-
-`scp alarm.py pi@<ip>:~` (password: raspberry)
-
-Files required to be copied:
-
-- alarm.py
-- key_file.txt (Rename key_file.txt.orig to key_file.txt)
-- logging.conf.yaml (Rename logging.conf.yaml.orig to logging.conf.yaml)
-- siren1.mp3
-
-To execute:
-```
-sudo su
-python alarm.py
-```
-
-To list all available options:
-```
-python alarm.py -h
-```
-
-### Security
-
-The key_file.txt defines users and their associated key_access code.  If there are entries in this file, access_key must
-be provided in the JSON request to turn the alarm on/off.  If there are no entries or all the entries are commented out, anyone can turn the alarm on/off.
-
-### Logging
-
-Logging configuration is defined in logging.conf.yaml.  By default, it will log both to console and to file (alarm.log).  
-
-### API
-
-- [Swagger file](docs/alarm.yml)
-- <http://<ip>/alarm/on>
-- <http://<ip>/alarm/off>
-
-### Unit testing
-
-`python -m unittest`
-
-### Debugging
-
-You can interactively debug the app while it is running.  
-
-```
-sudo su
-cd <workspace>
-export FLASK_APP=alarm.py
-export FLASK_DEBUG=1
-flask run
-```
-
-### Todo
-
-- Add initial check if internet connection
-
-### History
-
-- 1.0.0 - Initial release (28 Sept 2018) - Oliver Tseng (oliver.tseng@t-mobile.com)
+Read the [usage instructions](usage-instructions.md) to begin using your Pi Alarm.
