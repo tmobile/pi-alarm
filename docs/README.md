@@ -49,9 +49,7 @@ connects to Pi pin 6 (ground).  The S pin on the relay connects to Pi pin 12 (GP
 
 ## Code
 
-https://bitbucket.service.edp.t-mobile.com/users/otseng/repos/pi-alarm/browse
-
-git -c http.sslVerify=false clone https://OTseng@bitbucket.service.edp.t-mobile.com/scm/~otseng/pi-alarm.git
+https://github.com/tmobile/pi-alarm
 
 ### Python setup
 
@@ -64,12 +62,9 @@ ln -s /usr/bin/python3 /usr/bin/python
 
 Python required modules
 ```
-pip install Flask
-pip install Flask-API
-pip install flask-cors
-pip install PyYAML
+pip install Flask Flask-API flask-cors PyYAML
 ```
-> *Note:* _Windows Users, if u have installed Python/Pip3 via Cygwin, you need to install Python on Windows OS explicitly and set it on path; for unit tests to run_
+> *Note:* _Windows Users, if you have installed Python/Pip3 via Cygwin, you need to install Python on Windows OS explicitly and set it on path; for unit tests to run_
 
 ### Transfer file from PC to Pi
 
@@ -85,7 +80,7 @@ Files required to be copied:
 
 - alarm.py
 - key_file.txt (Rename key_file.txt.orig to key_file.txt)
-- logging.conf (Rename logging.conf.orig to logging.conf)
+- logging.conf.yaml (Rename logging.conf.yaml.orig to logging.conf.yaml)
 - siren1.mp3
 
 To execute:
@@ -102,18 +97,17 @@ python alarm.py -h
 ### Security
 
 The key_file.txt defines users and their associated key_access code.  If there are entries in this file, access_key must
-be provided in the JSON request to turn the alarm on/off.  If there are no entries or all the entries are commented out,
-anyone can turn the alarm on/off.
+be provided in the JSON request to turn the alarm on/off.  If there are no entries or all the entries are commented out, anyone can turn the alarm on/off.
 
 ### Logging
 
-Logging configuration is defined in logging.conf.  By default, it will log both to console and to file (alarm.log).  
+Logging configuration is defined in logging.conf.yaml.  By default, it will log both to console and to file (alarm.log).  
 
 ### API
 
 - [Swagger file](docs/alarm.yml)
-- <http://10.27.57.178/alarm/on>
-- <http://10.27.57.178/alarm/off>
+- <http://<ip>/alarm/on>
+- <http://<ip>/alarm/off>
 
 ### Unit testing
 

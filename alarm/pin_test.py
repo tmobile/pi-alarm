@@ -14,18 +14,16 @@
 # limitations under the License.
 # =========================================================================
 
-import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO #pylint: disable=import-error
 import sys, termios, tty
+
+PIN = 18
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(18,GPIO.OUT)
+GPIO.setup(PIN,GPIO.OUT)
 
-print("Setup:")
-print("pin 12 (bcm 18) to S")
-print("pin 6 (ground) to +)")
-print("pin 4 (5V) to -)")
-print("Commands:")
+print("Pin " + PIN)
 print("1 - turn on, 0 - turn off, q - quit")
 
 def getch():
@@ -47,9 +45,9 @@ while True:
         exit(0)
 
     if (char == "1"):
-        GPIO.output(18,GPIO.HIGH)
+        GPIO.output(PIN,GPIO.HIGH)
         print("on")
 
     elif (char == "0"):
         print("off")
-        GPIO.output(18,GPIO.LOW)
+        GPIO.output(PIN,GPIO.LOW)

@@ -15,8 +15,8 @@
 # =========================================================================
 #
 # Raspberry Pi Alarm
-#
-# http://tm/pialarmcode
+# 
+# https://github.com/tmobile/pi-alarm
 #
 
 from flask import request
@@ -59,7 +59,6 @@ if os.path.isfile(LOGGING_CONF):
 
 app = FlaskAPI(__name__)
 CORS(app)
-
 
 if sys.platform in PLATFORM_LIST:
 	ENABLE_PI = False
@@ -105,8 +104,7 @@ def turn_on(pin, timeout):
 			timer.cancel()
 			del timer_threads[pin]
 	timer_threads[pin] = new_timer
-	logging.info("Turn on pin " + str(pin) + " ((~🚨~)) ")
-	return
+	logging.info("Turn on pin " + str(pin) + " 🚨 ")
 
 def turn_off(pin):
 	global switch_state
@@ -119,12 +117,10 @@ def turn_off(pin):
 			timer.cancel()
 			del timer_threads[pin]
 	logging.info("Turn off pin " + str(pin)+ " 🔕 ")
-	return
 
 def play_sound():
 	if ENABLE_PI and ENABLE_SOUND:
 		os.system('mpg123 -q siren1.mp3 &')
-	return
 
 def load_keys():
 	global key_file, keys
@@ -148,17 +144,14 @@ def load_keys():
 					'user':user,
 					'pin':pin,
 					'url':url}
-	return
 
 def reset_timers():
 	for pin, timer in timer_threads.items():
 		if timer:
 			timer.cancel()
 		del timer_threads[pin]
-	return
 
 def cleanup():
-	# global key_file
 	try:
 		key_file.close()
 		reset_timers()
@@ -181,7 +174,6 @@ def open_url(url):
 	if ENABLE_LAUNCH_BROWSER and url:
 		webbrowser.open_new_tab(url)
 		logging.info("Open browser " + url)
-	return
 
 def log_user(user, state, request):
 
@@ -193,7 +185,6 @@ def log_user(user, state, request):
 	else:
 		user_access_log[user]['count'] += 1
 	user_access_log[user]['last_access'] = datetime.datetime.now()
-	return
 
 @app.route('/', methods=["GET"])
 def home():
