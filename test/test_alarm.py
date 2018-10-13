@@ -199,7 +199,7 @@ class AlarmTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(json_data["status"], "OK")
 
-    def test_logs(self):
+    def test_ping(self):
         resp = self.app.get('/ping')
         json_data = json.loads(resp.data.decode("utf-8") )
         self.assertEqual(resp.status_code, 200)

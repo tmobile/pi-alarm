@@ -4,3 +4,5 @@ __pycache__
 .vscode
 alarm/key_file.txt
 alarm/logging.conf.yaml
+.coverage
+htmlcov

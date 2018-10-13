@@ -42,3 +42,40 @@ pip install Flask Flask-API flask-cors PyYAML
 ## Installation Complete
 
 Your software installation is ready to be used! Check out the [usage instructions](usage-instructions.md) to learn how to use the Pi Alarm.
+
+## Unit testing
+
+To run the unit tests:
+
+```bash
+python -m unittest
+```
+
+## Code coverage
+
+Code coverage of the unit tests requies the [coverage](https://github.com/nedbat/coveragepy) module
+
+```bash
+pip install coverage
+```
+
+To run unit test code coverage:
+
+```bash
+coverage run -m unittest
+```
+
+To view the report in text format:
+
+```bash
+coverage report
+```
+
+To view the report in HTML format:
+
+```bash
+coverage html
+``` 
+> HTML report is in htmlcov directory
+
+  

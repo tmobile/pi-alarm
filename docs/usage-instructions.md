@@ -13,7 +13,7 @@ The `key_file.txt` defines users and their associated `key_access` code.  If the
 
 ## Logging
 
-Logging configuration is defined in logging.conf.  By default, it will log both to console and to file (alarm.log)
+Logging configuration is defined in logging.conf.yaml.  By default, it will log both to console and to file (alarm.log)
 
 ## The Pi-Alarm REST API
 
