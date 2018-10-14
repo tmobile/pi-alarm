@@ -19,24 +19,24 @@ Use SCP or Filezilla to transfer te following files to your Raspberry Pi:
 
 * `alarm.py`
 * `key_file.txt` (Rename `key_file.txt.orig` to `key_file.txt`)
-* `logging.conf` (Rename `logging.conf.orig` to `logging.conf`)
+* `logging.conf.yaml` (Rename `logging.conf.yaml.orig` to `logging.conf.yaml`)
 * `siren1.mp3`
 
-Top copy files, use `scp <file> pi@<ip>:~` where `<file>` is the fine name and `<ip>` is the IP address of your Pi. Here's an example:
+To copy files, use `scp <file> pi@<ip>:~` where `<file>` is the fine name and `<ip>` is the IP address of your Pi. Here's an example:
 
 > Note: The default password for your Raspberry Pi is `raspberry`.
 
 ```bash
-scp alarm.py pi@10.27.57.178:~
-scp key_file.txt pi@10.27.57.178:~
-scp logging.conf pi@10.27.57.178:~
-scp siren1.mp3 pi@10.27.57.178:~
+scp alarm.py pi@<ip>:~
+scp key_file.txt pi@<ip>:~
+scp logging.conf pi@<ip>:~
+scp siren1.mp3 pi@1<ip>:~
 ```
 
 ### Install required Python modules
 
 ```bash
-pip install Flask Flask-API flask-cors PyYAML
+pip install Flask Flask-API Flask-Cors PyYAML
 ```
 
 ## Installation Complete
