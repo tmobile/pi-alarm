@@ -61,13 +61,13 @@ class AlarmTestCase(unittest.TestCase):
         alarm.KEY_FILE = os.path.dirname(os.path.realpath(__file__)) + "/key_file.1.txt"
         alarm.load_keys()
         resp = self.app.post('/alarm/on',
-                       data=json.dumps(dict(access_key='abc123')),
+                       data=json.dumps(dict(access_key='abc123', timeout=180)),
                        content_type='application/json')
         json_data = json.loads(resp.data.decode("utf-8") )
         self.assertEqual(json_data["alarm"], "on")
 
         resp = self.app.post('/alarm/off',
-                       data=json.dumps(dict(access_key='abc123')),
+                       data=json.dumps(dict(access_key='abc123', timeout=300)),
                        content_type='application/json')
         json_data = json.loads(resp.data.decode("utf-8") )
         self.assertEqual(json_data["alarm"], "off")
@@ -185,6 +185,13 @@ class AlarmTestCase(unittest.TestCase):
 
         alarm.cleanup()
 
+    def test_invalid_json_request(self):
+        resp = self.app.post('/alarm/on',
+                       data='{"bad json"}',
+                       content_type='application/json')
+        json_data = json.loads(resp.data.decode("utf-8") )
+        self.assertEqual(json_data["status"], "error")
+
     def test_info(self):
         resp = self.app.get('/info')
         json_data = json.loads(resp.data.decode("utf-8") )
@@ -211,6 +218,21 @@ class AlarmTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(json_data["status"], "OK")
         self.assertTrue(len(alarm.timer_threads) == 0)
+
+    def test_process_arguments(self):
+        alarm.process_arguments(['-d', '-p9999'])
+        self.assertTrue(alarm.PORT == 9999)
+        self.assertTrue(alarm.ENABLE_DEBUGGER)
+        self.assertTrue(alarm.TIMEOUT == 60)
+
+        alarm.ENABLE_DEBUGGER = False
+        alarm.process_arguments(['-p3333', '-t360'])
+        self.assertTrue(alarm.PORT == 3333)
+        self.assertFalse(alarm.ENABLE_DEBUGGER)
+        self.assertTrue(alarm.TIMEOUT == 360)
+
+    def test_banner_info(self):
+        alarm.banner_info()
 
 if __name__ == '__main__':
     unittest.main()

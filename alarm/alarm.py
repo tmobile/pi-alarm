@@ -70,22 +70,26 @@ if ENABLE_PI:
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(18,GPIO.OUT)
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-d", "--debug", help="Enable debug mode (default disabled)", action="store_true")
-parser.add_argument("-p", "--port", help="Listen port (default 80)")
-parser.add_argument("-t", "--timeout", help="Alarm on timeout in seconds (default 60)")
-parser.add_argument("-v", "--version", help="Display version number", action="version", version=VERSION)
+def process_arguments(args):
+	global ENABLE_DEBUGGER, PORT, TIMEOUT
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-d", "--debug", help="Enable debug mode (default disabled)", action="store_true")
+	parser.add_argument("-p", "--port", help="Listen port (default 80)")
+	parser.add_argument("-t", "--timeout", help="Alarm on timeout in seconds (default 60)")
+	parser.add_argument("-v", "--version", help="Display version number", action="version", version=VERSION)
 
-args = parser.parse_args()
+	args = parser.parse_args(args)
 
-if args.debug:
-	ENABLE_DEBUGGER = args.debug
+	if args.debug:
+		ENABLE_DEBUGGER = args.debug
 
-if args.port:
-	PORT = args.port
+	if args.port:
+		PORT = int(args.port)
 
-if args.timeout:
-	TIMEOUT = args.timeout
+	if args.timeout:
+		TIMEOUT = int(args.timeout)
+
+process_arguments(sys.argv[1:])
 
 user_access_log = {}
 switch_state = {}
@@ -104,7 +108,7 @@ def turn_on(pin, timeout):
 			timer.cancel()
 			del timer_threads[pin]
 	timer_threads[pin] = new_timer
-	logging.info("Turn on pin " + str(pin) + " 🚨 ")
+	logging.info("Turn on pin " + str(pin) + " 🚨")
 
 def turn_off(pin):
 	global switch_state
@@ -116,7 +120,7 @@ def turn_off(pin):
 		if timer:
 			timer.cancel()
 			del timer_threads[pin]
-	logging.info("Turn off pin " + str(pin)+ " 🔕 ")
+	logging.info("Turn off pin " + str(pin)+ " 🔕")
 
 def play_sound():
 	if ENABLE_PI and ENABLE_SOUND:
@@ -186,6 +190,26 @@ def log_user(user, state, request):
 		user_access_log[user]['count'] += 1
 	user_access_log[user]['last_access'] = datetime.datetime.now()
 
+def get_ip_address():
+	ip = ""
+	try:
+		ip = subprocess.check_output(["hostname","-I"]) 
+		ip = ip.decode("utf-8").strip() 
+	except Exception:
+		logging.info("Could not get IP address")
+	return ip
+
+def banner_info():
+	logging.info("Pi Alarm " + VERSION)
+	logging.info("Platform: " + sys.platform)
+	if ENABLE_PI:
+		logging.info("IP: " + get_ip_address())
+	logging.info("Port: " + str(PORT))
+	logging.info("Timeout: " + str(TIMEOUT))
+	logging.info("Enable Pi: " + str(ENABLE_PI))
+	logging.info("Keys: " + str(len(keys)))
+	logging.info("Debug mode: " + str(ENABLE_DEBUGGER))
+
 @app.route('/', methods=["GET"])
 def home():
 	return {
@@ -200,7 +224,7 @@ def alarm_control(state):
 	url = False
 
 	try:
-		content = request.get_json(silent=True)
+		content = request.get_json(silent=False)
 		if keys_exist():
 			authorized = False
 			access_key = ""
@@ -288,15 +312,5 @@ def reset():
 load_keys()
 
 if __name__ == "__main__":
-	logging.info("Version: " + VERSION)
-	logging.info("Platform: " + sys.platform)
-	if ENABLE_PI:
-		ip = subprocess.check_output(["hostname","-I"])
-		ip = ip.decode("utf-8").strip()
-		logging.info("IP: " + ip)
-	logging.info("Port: " + str(PORT))
-	logging.info("Timeout: " + str(TIMEOUT))
-	logging.info("Enable Pi: " + str(ENABLE_PI))
-	logging.info("Keys: " + str(len(keys)))
-	logging.info("Debug mode: " + str(ENABLE_DEBUGGER))
+	banner_info()
 	app.run(host='0.0.0.0', port=PORT, debug=ENABLE_DEBUGGER)
