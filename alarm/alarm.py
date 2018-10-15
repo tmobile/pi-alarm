@@ -323,5 +323,8 @@ def reset():
 load_keys()
 
 if __name__ == "__main__":
+	if ENABLE_PI and get_ip_address() == "":
+		logging.error('Error: no network connection')
+		exit(1)
 	banner_info()
 	app.run(host='0.0.0.0', port=PORT, debug=ENABLE_DEBUGGER)
