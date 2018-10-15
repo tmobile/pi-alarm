@@ -68,7 +68,6 @@ if ENABLE_PI:
 	import RPi.GPIO as GPIO #pylint: disable=import-error
 	GPIO.setwarnings(False)
 	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(18,GPIO.OUT)
 
 def process_arguments(args):
 	global ENABLE_DEBUGGER, PORT, TIMEOUT
@@ -99,6 +98,7 @@ def turn_on(pin, timeout):
 	global switch_state
 	switch_state[pin] = "on"
 	if ENABLE_PI:
+		GPIO.setup(pin,GPIO.OUT)
 		GPIO.output(pin,GPIO.HIGH)
 	new_timer = Timer(int(timeout), turn_off, [pin])
 	new_timer.start()
@@ -114,6 +114,7 @@ def turn_off(pin):
 	global switch_state
 	switch_state[pin] = "off"
 	if ENABLE_PI:
+		GPIO.setup(pin,GPIO.OUT)
 		GPIO.output(pin,GPIO.LOW)
 	if pin in timer_threads:
 		timer = timer_threads[pin]
@@ -179,9 +180,15 @@ def open_url(url):
 		webbrowser.open_new_tab(url)
 		logging.info("Open browser " + url)
 
+def mask_sensitive_data(data):
+	if data and 'access_key' in data.keys():
+		data['access_key'] = "***"
+	return data
+
 def log_user(user, state, request):
 
-	logging.info("%s|%s|%s|%s", user, request.remote_addr, request.url, request.get_json(silent=True))
+	json_data = mask_sensitive_data(request.get_json(silent=True))
+	logging.info("%s|%s|%s|%s", user, request.remote_addr, request.url, json_data )
 
 	if user not in user_access_log:
 		user_access_log[user] = {}
@@ -241,9 +248,12 @@ def alarm_control(state):
 				return {
 				    "status" : "error",
 					"message": "unauthorized" }, 403
-		if not(content is None) and ('timeout' in content):
-			timeout = content['timeout']
-
+		if not(content is None):
+			if 'timeout' in content:
+				timeout = content['timeout']
+			if 'url' in content:
+				url = content['url']
+ 
 		log_user(user, state, request)
 
 		if (state == "on"):
@@ -265,7 +275,7 @@ def alarm_control(state):
 		return {
 			"status" : "error",
 			"message" : str(e)
-		}
+		}, 400
 
 @app.route('/info', methods=["GET"])
 def info():
@@ -305,6 +315,7 @@ def reset():
 	user_access_log = {}
 	load_keys()
 	reset_timers()
+	logging.info("Resetting")
 	return {
 		"status" : "OK"
 	}

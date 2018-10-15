@@ -83,7 +83,7 @@ class AlarmTestCase(unittest.TestCase):
         self.assertEqual(json_data["alarm"], "on")
 
         resp = self.app.post('/alarm/off',
-                       data=json.dumps(dict(access_key='abc123', timeout=300)),
+                       data=json.dumps(dict(access_key='abc123', url='http://t-mobile.com')),
                        content_type='application/json')
         json_data = json.loads(resp.data.decode("utf-8") )
         self.assertEqual(json_data["alarm"], "off")
@@ -207,6 +207,7 @@ class AlarmTestCase(unittest.TestCase):
                        content_type='application/json')
         json_data = json.loads(resp.data.decode("utf-8") )
         self.assertEqual(json_data["status"], "error")
+        self.assertEqual(resp.status_code, 400)
 
     def test_info(self):
         resp = self.app.get('/info')
@@ -247,8 +248,17 @@ class AlarmTestCase(unittest.TestCase):
         self.assertFalse(alarm.ENABLE_DEBUGGER)
         self.assertTrue(alarm.TIMEOUT == 360)
 
+    def test_mask_sensitive_data(self):
+        json_data = {'access_key':'secret password'}
+        self.assertTrue(alarm.mask_sensitive_data(json_data)['access_key'] == '***')
+        json_data = None
+        self.assertTrue(alarm.mask_sensitive_data(json_data) == None)
+
     def test_banner_info(self):
         alarm.banner_info()
+
+    def test_get_ip_address(self):
+        alarm.get_ip_address()
 
 if __name__ == '__main__':
     unittest.main()
