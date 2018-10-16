@@ -14,21 +14,25 @@
 # limitations under the License.
 # =========================================================================
  
-import os, sys
+import os
+import sys
 import unittest
+import unittest.mock as mock
 import tempfile
 import logging
 import json
+
 from alarm import alarm
 
 class AlarmTestCase(unittest.TestCase):
 
-    def setUp(self):
-        alarm.app.testing = True
-        self.app = alarm.app.test_client()
+    def setUpModule(self):
         logging._handlers.clear()
         logging.shutdown(logging._handlerList[:])
         del logging._handlerList[:]
+
+    def setUp(self):
+        self.app = alarm.app.test_client()
         alarm.LOGGING_CONF = os.path.dirname(os.path.realpath(__file__)) + "/logging.test.conf"
         logging.config.fileConfig(alarm.LOGGING_CONF)
 
@@ -209,6 +213,14 @@ class AlarmTestCase(unittest.TestCase):
         self.assertEqual(json_data["status"], "error")
         self.assertEqual(resp.status_code, 400)
 
+    def test_no_json_request(self):
+        resp = self.app.post('/alarm/on',
+                       data=None,
+                       content_type='application/json')
+        json_data = json.loads(resp.data.decode("utf-8") )
+        self.assertEqual(json_data["status"], "error")
+        self.assertEqual(resp.status_code, 400)
+
     def test_info(self):
         resp = self.app.get('/info')
         json_data = json.loads(resp.data.decode("utf-8") )
@@ -257,8 +269,18 @@ class AlarmTestCase(unittest.TestCase):
     def test_banner_info(self):
         alarm.banner_info()
 
-    def test_get_ip_address(self):
-        alarm.get_ip_address()
+    @mock.patch('alarm.alarm.subprocess')
+    def test_get_ip_address(self, mock_subprocess):
+        mock_subprocess.check_output.return_value = "1.2.3.4"
+        ip = alarm.get_ip_address()
+        self.assertTrue(ip == "1.2.3.4")
+
+    @mock.patch('alarm.alarm.webbrowser')
+    def test_open_url(self, mock_webbrowser):
+        alarm.ENABLE_LAUNCH_BROWSER = True
+        alarm.open_url("test")
+        mock_webbrowser.open_new_tab.return_value = None
+        mock_webbrowser.open_new_tab.assert_called_with("test")
 
 if __name__ == '__main__':
     unittest.main()

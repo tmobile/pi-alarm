@@ -64,10 +64,13 @@ if sys.platform in PLATFORM_LIST:
 	ENABLE_PI = False
 	PORT = 1080
 
-if ENABLE_PI:
+def enable_pi():
 	import RPi.GPIO as GPIO #pylint: disable=import-error
 	GPIO.setwarnings(False)
 	GPIO.setmode(GPIO.BCM)
+
+if ENABLE_PI:
+	enable_pi()
 
 def process_arguments(args):
 	global ENABLE_DEBUGGER, PORT, TIMEOUT
@@ -271,7 +274,6 @@ def alarm_control(state):
 		}
 	except Exception as e:
 		log_user("Error", str(e), request)
-		logging.exception(e)
 		return {
 			"status" : "error",
 			"message" : str(e)
