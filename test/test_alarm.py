@@ -62,17 +62,27 @@ class AlarmTestCase(unittest.TestCase):
         json_data = json.loads(resp.data.decode("utf-8") )
         self.assertEqual(json_data["alarm"], "on")
 
-    def test_invalid_key(self):
+    def test_check_key(self):
         alarm.KEY_FILE = os.path.dirname(os.path.realpath(__file__)) + "/key_file.1.txt"
         alarm.load_keys()
         self.assertTrue(alarm.keys_exist())
         self.assertTrue(alarm.check_key("abc123"))
         self.assertFalse(alarm.check_key("key_does_not_exist"))
 
-    def test_unauthorized(self):
+    def test_missing_post_data(self):
         alarm.KEY_FILE = os.path.dirname(os.path.realpath(__file__)) + "/key_file.1.txt"
         alarm.load_keys()
         resp = self.app.get('/alarm/on')
+        json_data = json.loads(resp.data.decode("utf-8") )
+        self.assertEqual(json_data["status"], "error")
+        self.assertEqual(resp.status_code, 400)
+
+    def test_invalid_key(self):
+        alarm.KEY_FILE = os.path.dirname(os.path.realpath(__file__)) + "/key_file.1.txt"
+        alarm.load_keys()
+        resp = self.app.post('/alarm/on',
+                       data=json.dumps(dict(access_key='bad key', timeout=180)),
+                       content_type='application/json')
         json_data = json.loads(resp.data.decode("utf-8") )
         self.assertEqual(json_data["status"], "error")
         self.assertEqual(resp.status_code, 403)

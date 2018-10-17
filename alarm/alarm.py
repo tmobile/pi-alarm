@@ -64,13 +64,10 @@ if sys.platform in PLATFORM_LIST:
 	ENABLE_PI = False
 	PORT = 1080
 
-def enable_pi():
+if ENABLE_PI:
 	import RPi.GPIO as GPIO #pylint: disable=import-error
 	GPIO.setwarnings(False)
 	GPIO.setmode(GPIO.BCM)
-
-if ENABLE_PI:
-	enable_pi()
 
 def process_arguments(args):
 	global ENABLE_DEBUGGER, PORT, TIMEOUT
@@ -188,10 +185,10 @@ def mask_sensitive_data(data):
 		data['access_key'] = "***"
 	return data
 
-def log_user(user, state, request):
+def log_user(user, request, message):
 
 	json_data = mask_sensitive_data(request.get_json(silent=True))
-	logging.info("%s|%s|%s|%s", user, request.remote_addr, request.url, json_data )
+	logging.info("%s|%s|%s|%s|%s", user, request.remote_addr, request.url, json_data, message )
 
 	if user not in user_access_log:
 		user_access_log[user] = {}
@@ -234,11 +231,17 @@ def alarm_control(state):
 	url = False
 
 	try:
-		content = request.get_json(silent=False)
 		if keys_exist():
 			authorized = False
 			access_key = ""
-			if not(content is None) and ('access_key' in content):
+			content = request.get_json(silent=True)
+			if content is None:
+				log_user("Error", request, "Missing post data")
+				return {
+					"status" : "error",
+					"message" : "Missing post data"
+				}, 400
+			if 'access_key' in content:
 				access_key = content['access_key']
 				data = check_key(access_key)
 				if not data == False:
@@ -251,13 +254,12 @@ def alarm_control(state):
 				return {
 				    "status" : "error",
 					"message": "unauthorized" }, 403
-		if not(content is None):
 			if 'timeout' in content:
 				timeout = content['timeout']
 			if 'url' in content:
 				url = content['url']
  
-		log_user(user, state, request)
+		log_user(user, request, "")
 
 		if (state == "on"):
 			turn_on(pin, timeout)
@@ -273,7 +275,7 @@ def alarm_control(state):
 			"pin" : pin
 		}
 	except Exception as e:
-		log_user("Error", str(e), request)
+		log_user("Error", request, str(e))
 		return {
 			"status" : "error",
 			"message" : str(e)
