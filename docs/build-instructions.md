@@ -30,3 +30,5 @@ Though this project *can* use with a standard power outlet to power the alarm, b
 ### About the Relay Switch
 
 The alarm is powered by a 120V outlet. The relay switch opens and closes the 120V power supply.  The relay switch has 3 input controls (`+`, `-`, and `S`).  The `+` and `-` provide the power to the relay.  The `S` turns the relay on and off.  The `+` pin on the relay connects to Pi pin `4` (5V).  The `-` pin on the relay connects to Pi pin `6` (ground).  The `S` pin on the relay connects to Pi pin `12` (GPIO 18).
+
+![GPIO](images/gpio_pins.png)
