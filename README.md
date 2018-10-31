@@ -85,4 +85,6 @@ flask run
 
 ## Contributions
 
-Your contributions are most likely to be accepted if they are useful, well documented, and covered by unit tests.
+Code contributions are most likely to be accepted if they are useful, well documented, and covered by unit tests.
+
+We'd love to hear how you are using Pi-alarm.  Post pictures of how you are using your setup [here](docs/user_contrib/README.md).
