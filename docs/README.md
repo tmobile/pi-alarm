@@ -29,3 +29,7 @@ Once you've installed the Pi-Alarm software and connected all the hardware, you'
 ## Using Your Pi Alarm
 
 Read the [usage instructions](usage-instructions.md) to begin using your Pi Alarm.
+
+## Forking
+
+We welcome people experimenting with different platforms and different software versions.  Please note that we cannot provide support or modifications for platforms and software different than what we use.  However, you should feel free to fork the tree for new platforms and software.  As per best practices, have your Information Technology department review this source code or any forks prior to any production or consequential use.  Please note that any forms of the tree are to comply with any open source licenses including Apache 2.0.

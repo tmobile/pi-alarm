@@ -256,8 +256,8 @@ def alarm_control(state):
 					"message": "unauthorized" }, 403
 			if 'timeout' in content:
 				timeout = content['timeout']
-			if 'url' in content:
-				url = content['url']
+			if 'job_url' in content:
+				url = content['job_url']
  
 		log_user(user, request, "")
 

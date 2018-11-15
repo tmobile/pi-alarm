@@ -88,3 +88,7 @@ flask run
 Code contributions are most likely to be accepted if they are useful, well documented, and covered by unit tests.
 
 We'd love to hear how you are using Pi-alarm.  Post pictures of how you are using your setup [here](docs/user_contrib/README.md).
+
+## Forking
+
+We welcome people experimenting with different platforms and different software versions.  Please note that we cannot provide support or modifications for platforms and software different than what we use.  However, you should feel free to fork the tree for new platforms and software.  As per best practices, have your Information Technology department review this source code or any forks prior to any production or consequential use.  Please note that any forms of the tree are to comply with any open source licenses including Apache 2.0.
